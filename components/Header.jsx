@@ -67,7 +67,7 @@ export default function Header({ headerName }) {
                 <a href="#work" onClick={handleCloseMenu}>Work</a>
                 <a href="#contact" onClick={handleCloseMenu}>Contact</a>
                 <a
-                  href="/public/AproopSaggam(Resume).pdf"
+                  href="Resume/AproopSaggam(Resume).pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

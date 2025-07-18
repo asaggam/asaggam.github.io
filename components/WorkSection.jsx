@@ -4,7 +4,7 @@ export const works = [
     title: "Epsy Portal",
     description:
       "A health companion app for epilepsy patients to log seizures, manage medications, and share insights with clinicians via the connected Epsy Hub portal.",
-    image: "/public/work-logos/epsy_portal.png",
+    image: "work-logos/epsy_portal.png",
     link: "https://www.epsyhealth.com/",
     tags: [
       "React",
@@ -24,7 +24,7 @@ export const works = [
     title: "Sm@rtGear Mobile App",
     description:
       "An industrial mobile solution providing real-time diagnostics and control for SmartGear switchgear systems, enhancing electrical safety and equipment monitoring.",
-    image: "/public/work-logos/Siemens_app.png",
+    image: "work-logos/Siemens_app.png",
     link: "https://www.siemens.com/us/en/products/energy/low-voltage/smart-technology/smart-mobile.html",
     tags: [
       "Xamarin.Forms",
@@ -43,7 +43,7 @@ export const works = [
     title: "National Life Group App",
     description:
       "A cross-platform mobile app enabling policyholders to manage life insurance and annuity accounts, make payments, view balances, and contact agents securely.",
-    image: "/public/work-logos/customer-hd-lg.jpg",
+    image: "work-logos/customer-hd-lg.jpg",
     link: "https://www.nationallife.com/customertools",
     tags: [
       "Xamarin.Forms",
@@ -59,7 +59,7 @@ export const works = [
     title: "Lexus Drivers App",
     description:
       "A companion app for Lexus owners offering service history, remote vehicle access, maintenance alerts, and VIN-based features for a seamless ownership experience.",
-    image: "/public/work-logos/Lexus_drivers.png",
+    image: "work-logos/Lexus_drivers.png",
     link: "https://www.lexus.com/My-Lexus/resources/connected-technology",
     tags: [
       "Xamarin.Forms",
@@ -120,7 +120,7 @@ export default function WorkSection() { return (
                     className="inline-block"
                   >
                     <img
-                      src="/public/logos/external_icon.png"
+                      src="logos/external_icon.png"
                       alt="external link"
                       className="w-15 h-10 hover:opacity-80 transition-opacity"
                     />

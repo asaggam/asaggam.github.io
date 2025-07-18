@@ -78,7 +78,7 @@ export default function PortfolioPage() {
                 <a href="#work" onClick={handleCloseMenu}>Work</a>
                 <a href="#contact" onClick={handleCloseMenu}>Contact</a>
                 <a
-                  href="/public/Resume/AproopSaggam(Resume).pdf"
+                  href="Resume/AproopSaggam(Resume).pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -106,7 +106,7 @@ export default function PortfolioPage() {
             </p>
 
             <a
-              href="/public/Resume/AproopSaggam(Resume).pdf"
+              href="Resume/AproopSaggam(Resume).pdf"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -131,7 +131,7 @@ export default function PortfolioPage() {
           </div>
           <div className="md:w-1/3">
             <div className="w-48 h-48 sm:w-60 sm:h-60 mx-auto rounded-full overflow-hidden shadow-lg">
-              <img src="/public/IMG_7430.jpg" alt="Profile" className="w-full h-full object-cover" />
+              <img src="IMG_7430.jpg" alt="Profile" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
@@ -237,7 +237,7 @@ export default function PortfolioPage() {
                     className="inline-block"
                   >
                     <img
-                      src="/public/logos/external_icon.png"
+                      src="logos/external_icon.png"
                       alt="external link"
                       className="w-15 h-10 hover:opacity-80 transition-opacity"
                     />

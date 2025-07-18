@@ -1,7 +1,7 @@
 export const experiences = [
   {
     title: "Senior Full Stack Engineer",
-    imgSource: "/public/company-logos/LivaNovalogolarge.jpg",
+    imgSource: "company-logos/LivaNovalogolarge.jpg",
     year: "June 2022 - Present",
     category: "Remote",
     description: ["VNS Therapy Ecosystem",
@@ -14,7 +14,7 @@ export const experiences = [
   },
   {
     title: "Deloitte Consulting LLC",
-    imgSource: "/public/company-logos/Deloitte_Logo.jpg",
+    imgSource: "company-logos/Deloitte_Logo.jpg",
     year: "April 2019 - June 2022",
     category: "Gilbert, AZ",
     description: [
@@ -29,7 +29,7 @@ export const experiences = [
   },
   {
     title: "Siemens Industry Inc",
-    imgSource: "/public/company-logos/logo-siemens.png",
+    imgSource: "company-logos/logo-siemens.png",
     year: "Oct 2018 - Mar 2019",
     category: "Grand Prairie, TX",
     description: [
@@ -44,7 +44,7 @@ export const experiences = [
   },
   {
     title: "National Life Group",
-    imgSource: "/public/company-logos/NLG_White_Logo_2x_Green.png",
+    imgSource: "company-logos/NLG_White_Logo_2x_Green.png",
     year: "Sept 2019 - Sept 2018",
     category: "Montpelier, VT",
     description: [
@@ -57,7 +57,7 @@ export const experiences = [
   },
     {
     title: "Toyota Motor North America, Inc",
-    imgSource: "/public/company-logos/Toyota-Logo-2010-2019.png",
+    imgSource: "company-logos/Toyota-Logo-2010-2019.png",
     year: "2019",
     category: "Torrance, CA",
     description: [
