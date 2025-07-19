@@ -358,7 +358,7 @@ export default function PortfolioPage() {
                     <img
                       src="logos/external_icon.png"
                       alt="external link"
-                      className={`w-15 h-10 hover:opacity-80 ${isNightMode ? 'bg-transparent' : 'bg-[#F3F2F0]'} transition-opacity`}
+                      className={`w-15 h-10 hover:opacity-80 ${isNightMode ? 'bg-transparent' : 'bg-white'} transition-opacity`}
                     />
                   </a>
                 )}
