@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import IntroSection from "../components/IntroSection";
 import ExperienceSection, { experiences } from "../components/ExperienceSection";
@@ -11,41 +11,153 @@ export default function PortfolioPage() {
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isAnimatingOut, setAnimatingOut] = useState(false);
     const headerName = "Aproop Saggam { AS }";
-  
-    const handleCloseMenu = () => {
-      setAnimatingOut(true);
-      setTimeout(() => {
-        setMobileMenuOpen(false);
-        setAnimatingOut(false);
-      }, 300);
-    };
+    const [isNightMode, setNightMode] = useState(false);
+
+      const handleCloseMenu = () => {
+        setAnimatingOut(true);
+        setTimeout(() => {
+          setMobileMenuOpen(false);
+          setAnimatingOut(false);
+        }, 300);
+      };
+
+      useEffect(() => {
+        if (!isNightMode) return;
+
+        const canvas = document.createElement("canvas");
+        canvas.id = "dotCanvas";
+        canvas.className = "fixed top-0 left-0 w-full h-full z-0";
+        document.body.appendChild(canvas);
+
+        const ctx = canvas.getContext("2d");
+        let width, height;
+        const dots = [];
+        const numDots = 400;
+        const connectDistance = 100;
+        let mouse = { x: null, y: null };
+
+        function resize() {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        }
+
+        function initDots() {
+          dots.length = 0;
+          for (let i = 0; i < numDots; i++) {
+            dots.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              vx: (Math.random() - 0.5) * 0.5,
+              vy: (Math.random() - 0.5) * 0.5,
+            });
+          }
+        }
+
+        function updateDots() {
+          for (let dot of dots) {
+            dot.x += dot.vx;
+            dot.y += dot.vy;
+            if (dot.x < 0 || dot.x > width) dot.vx *= -1;
+            if (dot.y < 0 || dot.y > height) dot.vy *= -1;
+          }
+        }
+
+        function drawDots() {
+          ctx.clearRect(0, 0, width, height);
+          for (let dot of dots) {
+            let dx = dot.x - mouse.x;
+            let dy = dot.y - mouse.y;
+            let mouseDistance = Math.sqrt(dx * dx + dy * dy);
+            ctx.beginPath();
+            ctx.arc(dot.x, dot.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = mouseDistance < connectDistance
+              ? "rgba(255,255,255,0.9)"
+              : "rgba(255,255,255,0.1)";
+            ctx.fill();
+          }
+          drawLines();
+        }
+
+        function drawLines() {
+          for (let i = 0; i < dots.length; i++) {
+            for (let j = i + 1; j < dots.length; j++) {
+              let dx = dots[i].x - dots[j].x;
+              let dy = dots[i].y - dots[j].y;
+              let distance = Math.sqrt(dx * dx + dy * dy);
+              let mouseDx = dots[i].x - mouse.x;
+              let mouseDy = dots[i].y - mouse.y;
+              let mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
+
+              if (distance < connectDistance && mouseDistance < connectDistance) {
+                ctx.beginPath();
+                ctx.moveTo(dots[i].x, dots[i].y);
+                ctx.lineTo(dots[j].x, dots[j].y);
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
+                ctx.stroke();
+              }
+            }
+          }
+        }
+
+        function animate() {
+          updateDots();
+          drawDots();
+          requestAnimationFrame(animate);
+        }
+
+        resize();
+        initDots();
+        animate();
+
+        window.addEventListener("mousemove", e => {
+          mouse.x = e.clientX;
+          mouse.y = e.clientY;
+        });
+        window.addEventListener("resize", () => {
+          resize();
+          initDots();
+        });
+
+        return () => {
+          document.body.removeChild(canvas);
+        };
+      }, [isNightMode]);
     
   return (
-      <main className="font-sans text-[#21243D] pt-24">
-
-        {/* Header */}
-        <header className="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-8 bg-white/95 bg-opacity-40">
-       {/* <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm py-4 px-4 sm:px-8"> */}
+      <main className={`font-sans pt-24 ${isNightMode ? "bg-[#0b0c10] text-white" : "bg-white text-[#21243D]"}`}>
+    {/* Floating Header */}
+     {/* <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm py-4 px-4 sm:px-8"> */}
+      <header className={`fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-8 ${isNightMode ? 'bg-transparent' : 'bg-white/95 bg-opacity-40'}`} >
         <div className="flex justify-between items-center">
           <a href="#intro" className="text-xl font-bold">{headerName}</a>
 
           {/* Desktop Nav */}
           <nav className="hidden sm:flex space-x-6 text-sm font-medium">
-            <a href="#experience" className="hover:text-[#00A8CC]">Experience</a>
-            <a href="#skills" className="hover:text-[#00A8CC]">Skills</a>
-            <a href="#work" className="hover:text-[#00A8CC]">Work</a>
-            <a href="#contact" className="hover:text-[#00A8CC]">Contact</a>
+            
+             {/* Night Mode Button */}
+            <div className="hidden sm:flex items-center space-x-2 mr-4">
+              <span className="text-sm font-medium">Try Me - </span>
+              <button
+                className="px-3 py-2 text-sm font-medium rounded bg-gray-800 text-white hover:bg-gray-700"
+                onClick={() => setNightMode(prev => !prev)}
+              >
+                {isNightMode ? "Light Mode" : "Night Mode"}
+              </button>
+            </div>
+
+            <a href="#experience" className="hover:text-[#00A8CC] flex items-center">Experience</a>
+            <a href="#skills" className="hover:text-[#00A8CC] flex items-center">Skills</a>
+            <a href="#work" className="hover:text-[#00A8CC] flex items-center">Work</a>
+            <a href="#contact" className="hover:text-[#00A8CC] flex items-center">Contact</a>
           </nav>
 
           {/* Hamburger */}
           <button
-            className="sm:hidden focus:outline-none"
+            className="sm:hidden focus:outline-none ml-4"
             onClick={() => setMobileMenuOpen(true)}
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2"
-              viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16" />
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
         </div>
@@ -57,18 +169,13 @@ export default function PortfolioPage() {
             onClick={handleCloseMenu}
           >
             <div
-              className={`bg-white w-4/5 h-full p-6 absolute top-0 right-0 shadow-lg transition-transform duration-300 transform 
+              className={`${isNightMode ? 'bg-transparent' : 'bg-white' } w-4/5 h-full p-6 absolute top-0 right-0 shadow-lg transition-transform duration-300 transform 
                 ${isAnimatingOut ? "animate-slide-out-right" : "animate-slide-in-right"}`}
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                className="mb-6"
-                onClick={handleCloseMenu}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2"
-                  viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12" />
+              <button className="mb-6" onClick={handleCloseMenu}>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
@@ -77,23 +184,35 @@ export default function PortfolioPage() {
                 <a href="#skills" onClick={handleCloseMenu}>Skills</a>
                 <a href="#work" onClick={handleCloseMenu}>Work</a>
                 <a href="#contact" onClick={handleCloseMenu}>Contact</a>
-                <a
-                  href="Resume/AproopSaggam(Resume).pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="bg-[#FF6464] text-white px-6 py-3 rounded-md font-semibold">
-                    Download Resume
-                  </button>
-                </a>
               </nav>
+
+              <a
+              href="Resume/AproopSaggam(Resume).pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              >
+              <button className="bg-[#FF6464] text-white px-6 py-3 mt-6 rounded-md font-semibold">
+                Download Resume
+              </button>
+              </a>
+
+              {/* Night Mode Button */}
+              <div className="sm:hidden flex mt-6 items-center space-x-2">
+                <button
+                  className="px-3 py-2 text-sm font-medium rounded bg-gray-800 text-white hover:bg-gray-700"
+                  onClick={() => setNightMode(prev => !prev)}
+                >
+                  {isNightMode ? "Light Mode" : "Night Mode"}
+                </button>
+                <p className="text-md font-medium"> - Try Me</p>
+              </div>
             </div>
           </div>
         )}
       </header>
 
       {/* Intro Section */}
-      <section id="intro" className="px-4 sm:px-8 py-12">
+      <section id="intro" className="relative z-10 px-4 sm:px-8 py-12">
         <div className="flex flex-col-reverse md:flex-row items-top justify-between gap-12">
           <div className="md:w-1/2 text-left">
             <h2 className="text-3xl sm:text-4xl font-bold leading-tight mb-4">
@@ -131,14 +250,14 @@ export default function PortfolioPage() {
           </div>
           <div className="md:w-1/3">
             <div className="w-48 h-48 sm:w-60 sm:h-60 mx-auto rounded-full overflow-hidden shadow-lg">
-              <img src="IMG_7430.jpg" alt="Profile" className="w-full h-full object-cover" />
+              <img src="/IMG_7430.jpg" alt="Profile" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Experience Section */}
-      <section id="experience" className="py-12 px-4 sm:px-8 bg-[#F3F2F0]">
+      {/* Experience */}
+      <section id="experience" className={`py-12 px-4 sm:px-8 ${isNightMode ? 'bg-transparent' : 'bg-[#F3F2F0]'}`}>
          <div className="text-center mb-12">
           <div className="inline-block bg-[#DEDEDE] text-gray-600 px-4 py-1 rounded-full text-sm font-medium mb-4">
             Experience
@@ -146,7 +265,7 @@ export default function PortfolioPage() {
         </div>
         <div className="space-y-12">
           {experiences.map((exp, index) => (
-            <div key={index} className="bg-white shadow-md rounded-lg overflow-hidden max-w-4xl mx-auto">
+            <div key={index} className={`${isNightMode ? 'bg-transparent' : 'bg-white'} shadow-md rounded-lg overflow-hidden max-w-4xl mx-auto`}>
               <div className="flex flex-col md:flex-row">
                 <div className="md:w-1/3 w-full h-60 md:h-auto">
                   <img src={exp.imgSource} alt="work" className="object-cover" />
@@ -189,8 +308,8 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      {/* Work Section */}
-       <section id="work" className="bg-[#F3F2F0] py-16 px-4 sm:px-8">
+       {/* Work Section */}
+      <section id="work" className={`py-16 px-4 sm:px-8 ${isNightMode ? 'bg-transparent' : 'bg-[#F3F2F0]'} relative z-10`}>
         <div className="text-center mb-12">
           <div className="inline-block bg-[#DEDEDE] text-gray-600 px-4 py-1 rounded-full text-sm font-medium mb-4">
             Work
@@ -203,7 +322,7 @@ export default function PortfolioPage() {
           {works.map((project, index) => (
             <div
               key={index}
-              className="bg-white p-6 rounded-2xl shadow-md flex flex-col md:flex-row gap-6 items-start"
+              className={`${isNightMode ? 'bg-transparent' : 'bg-white'} p-6 rounded-2xl shadow-md flex flex-col md:flex-row gap-6 items-start`}
             >
               <div className="md:w-1/2 w-full overflow-hidden rounded-xl">
                 <img
@@ -213,7 +332,7 @@ export default function PortfolioPage() {
                 />
               </div>
               <div className="md:w-1/2 w-full">
-                <h3 className="text-lg font-semibold mb-2 text-gray-800">
+                <h3 className="text-lg font-semibold mb-2 ">
                   {project.title}
                 </h3>
                 <p className="text-sm text-gray-600 mb-4">
@@ -239,7 +358,7 @@ export default function PortfolioPage() {
                     <img
                       src="logos/external_icon.png"
                       alt="external link"
-                      className="w-15 h-10 hover:opacity-80 transition-opacity"
+                      className={`w-15 h-10 hover:opacity-80 ${isNightMode ? 'bg-transparent' : 'bg-[#F3F2F0]'} transition-opacity`}
                     />
                   </a>
                 )}
@@ -250,7 +369,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 px-4 sm:px-8 text-center bg-white">
+      <section id="contact" className={`py-16 px-4 sm:px-8 text-center ${isNightMode ? 'bg-transparent' : 'bg-white'} relative z-10`}>
         <div className="inline-block bg-[#DEDEDE] text-gray-600 px-4 py-1 rounded-full text-sm font-medium mb-4">
             Get in touch
         </div>
@@ -276,7 +395,7 @@ export default function PortfolioPage() {
           name="name"
           placeholder="Name"
           required
-          className="w-full border border-gray-400 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6464]"
+          className="w-full border border-gray-400 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6464] text-gray-800"
         />
 
         <input
@@ -284,7 +403,7 @@ export default function PortfolioPage() {
           name="email"
           placeholder="Email"
           required
-          className="w-full border border-gray-400 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6464]"
+          className="w-full border border-gray-400 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6464] text-gray-800"
         />
 
         <textarea
@@ -292,7 +411,7 @@ export default function PortfolioPage() {
           rows="5"
           placeholder="Message"
           required
-          className="w-full border border-gray-400 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6464]"
+          className="w-full border border-gray-400 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF6464] text-gray-800"
         ></textarea>
 
           <button
@@ -319,6 +438,7 @@ export default function PortfolioPage() {
             </a>
         </div>
         </section>
+
 
       {/* Footer */}
        <footer className="text-center py-8 text-sm text-gray-400">
