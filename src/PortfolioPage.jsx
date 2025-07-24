@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import Header from "../components/Header";
-import IntroSection from "../components/IntroSection";
-import ExperienceSection, { experiences } from "../components/ExperienceSection";
-import SkillsSection, { skills } from "../components/SkillsSection";
-import WorkSection, { works } from "../components/WorkSection";
-import ContactSection from "../components/ContactSection";
-import Footer from "../components/Footer";
+import { experiences, skills, works } from "./data";
 
 export default function PortfolioPage() {
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
